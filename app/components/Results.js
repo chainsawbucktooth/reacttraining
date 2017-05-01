@@ -5,19 +5,20 @@ var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
 var PlayerPreview = require('./PlayerPreview');
 
-function Profile(props) {
+function Profile (props) {
   var info = props.info;
-  return(
-    <PlayerPreview avatar={info.avatar_url} username={info.login}>
-    <ul className='space-list-items'>
-       {info.name && <li>{info.name}</li>}
-       {info.location && <li>{info.location}</li>}
-       {info.company && <li>{info.company}</li>}
-       <li>Followers: {info.followers}</li>
-       <li>Following: {info.following}</li>
-       <li>Public Repos: {info.public_repos}</li>
-       {info.blog && <li><a href={info.blog}>{info.blog}</a></li>}
-     </ul>
+
+  return (
+    <PlayerPreview username={info.login} avatar={info.avatar_url}>
+      <ul className='space-list-items'>
+        {info.name && <li>{info.name}</li>}
+        {info.location && <li>{info.location}</li>}
+        {info.company && <li>{info.company}</li>}
+        <li>Followers: {info.followers}</li>
+        <li>Following: {info.following}</li>
+        <li>Public Repos: {info.public_repos}</li>
+        {info.blog && <li><a href={info.blog}>{info.blog}</a></li>}
+      </ul>
     </PlayerPreview>
   )
 }
@@ -26,16 +27,12 @@ Profile.propTypes = {
   info: PropTypes.object.isRequired,
 }
 
-
-
-//has no state, no life cycle functions
-//stateless functional Component
-function Player(props) {
-  return(
+function Player (props) {
+  return (
     <div>
       <h1 className='header'>{props.label}</h1>
       <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
-      <Profile info={props.profile}/>
+      <Profile info={props.profile} />
     </div>
   )
 }
@@ -46,7 +43,6 @@ Player.propTypes = {
   profile: PropTypes.object.isRequired,
 }
 
-
 class Results extends React.Component {
   constructor(props) {
     super(props);
@@ -54,36 +50,35 @@ class Results extends React.Component {
       winner: null,
       loser: null,
       error: null,
-      loading: true
+      loading: true,
     }
   }
-
   componentDidMount() {
     var players = queryString.parse(this.props.location.search);
+
     api.battle([
       players.playerOneName,
       players.playerTwoName
-    ]).then(function(players){
+    ]).then(function (players) {
       if (players === null) {
-        return this.setState(function() {
+        return this.setState(function () {
           return {
-            error: 'Looks like there was an error. Please check that both users exist on Github',
+            error: 'Looks like there was an error. Check that both users exist on Github.',
             loading: false,
           }
         });
       }
 
-      this.setState(function() {
+      this.setState(function () {
         return {
           error: null,
-          winner: results[0],
-          loser: results[1],
-          loading: false
+          winner: players[0],
+          loser: players[1],
+          loading: false,
         }
-      })
+      });
     }.bind(this));
   }
-
   render() {
     var error = this.state.error;
     var winner = this.state.winner;
@@ -91,19 +86,19 @@ class Results extends React.Component {
     var loading = this.state.loading;
 
     if (loading === true) {
-      return <p>LOADING</p>
+      return <p>Loading!</p>
     }
 
     if (error) {
       return (
         <div>
           <p>{error}</p>
-          <Link to='/battle'>Reset Battle</Link>
+          <Link to='/battle'>Reset</Link>
         </div>
       )
     }
 
-    return(
+    return (
       <div className='row'>
         <Player
           label='Winner'
@@ -117,7 +112,7 @@ class Results extends React.Component {
         />
       </div>
     )
- }
+  }
 }
 
 module.exports = Results;
