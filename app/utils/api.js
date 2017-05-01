@@ -12,27 +12,32 @@ function getProfile (username) {
 }
 
 function getRepos(username) {
-  return axios.get(axios.get('https://api.github.com/users/' + username) + '/repos' + '&per_page=100')
+  console.log("repos acquired")
+  return axios.get(axios.get('https://api.github.com/users/' + username + '/repos'))
 }
 
 function getStarCount(repos) {
+  console.log("star count obtained")
   return repos.data.reduce(function(count, repo){
     return count + repo.stargazers_count;
   }, 0);
 }
 
-function calculateScore(profilee, repos) {
+function calculateScore(profile, repos) {
+  console.log("score calcumulated")
   var followers = profile.followers;
   var totalStars = getStarCount(repos);
   return (followers * 3) + totalStars;
 }
 
 function handleError(error) {
+  console.log("error thrown overboard")
   console.warn(error);
   return null;
 }
 
 function getUserData(player) {
+  console.log("user data has been purloined and sold to highest bidder")
   return axios.all([
     getProfile(player),
     getRepos(player)
@@ -48,6 +53,7 @@ function getUserData(player) {
 }
 
 function sortPlayers(players) {
+  console.log("players sorted by the Sorting Hat")
   return players.sort(function(a, b){
     return b.score - a.score;
   })

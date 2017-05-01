@@ -34,7 +34,7 @@ function Player(props) {
   return(
     <div>
       <h1 className='header'>{props.label}</h1>
-      <h3>Score: {props.score}</h3>
+      <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
       <Profile info={props.profile}/>
     </div>
   )
@@ -59,12 +59,12 @@ class Results extends React.Component {
   }
 
   componentDidMount() {
-    var players = queryString.parse(this.props.location.search)
+    var players = queryString.parse(this.props.location.search);
     api.battle([
       players.playerOneName,
       players.playerTwoName
-    ]).then(function(results){
-      if (results === null) {
+    ]).then(function(players){
+      if (players === null) {
         return this.setState(function() {
           return {
             error: 'Looks like there was an error. Please check that both users exist on Github',
@@ -106,12 +106,12 @@ class Results extends React.Component {
     return(
       <div className='row'>
         <Player
-          label='winner'
+          label='Winner'
           score={winner.score}
           profile={winner.profile}
         />
         <Player
-          label='loser'
+          label='Loser'
           score={loser.score}
           profile={loser.profile}
         />
