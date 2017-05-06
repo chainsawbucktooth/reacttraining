@@ -1,7 +1,10 @@
 var React = require('react');
 var PropTypes = require('prop-types');
+var api = require('../utils/api');
 
 function PlayerPreview(props) {
+    console.log("Avatar: " + props.avatar);
+      console.log("Username: "+ props.username);
   return (
     <div>
       <div className='column'>
@@ -9,7 +12,7 @@ function PlayerPreview(props) {
           src={props.avatar}
           alt={'Avatar for ' + props.username}
           />
-          <h2 className='username'>@{props.username}</h2>
+          <h2 className='username'>{props.username}</h2>
       </div>
        {props.children}
     </div>

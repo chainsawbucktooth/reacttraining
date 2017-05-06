@@ -16,6 +16,11 @@ function Nav () {
         </NavLink>
       </li>
       <li>
+        <NavLink activeClassName='active' to='/movie'>
+          Movie
+        </NavLink>
+      </li>
+      <li>
         <NavLink activeClassName='active' to='/popular'>
           Popular
         </NavLink>
