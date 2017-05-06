@@ -11,6 +11,15 @@ function getProfile (username) {
     });
 }
 
+function getMovie (searchterm) {
+  return axios.get('https://www.omdbapi.com/?s=' + searchterm + '&type=movie')
+    .then(function (movies) {
+      console.log(movies["Search"]);
+      return movies["Search"];
+    });
+}
+
+
 function getRepos (username) {
   return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100');
 }
@@ -61,11 +70,12 @@ module.exports = {
       .catch(handleError);
   },
   fetchPopularRepos: function (language) {
-    var encodedURI = window.encodeURI('https://api.github.com/search/repositories?q=stars:>1+language:'+ language + '&sort=stars&order=desc&type=Repositories');
+    var encodedURI = window.encodeURI('https://www.omdbapi.com/?s=' + language + '&type=movie');
 
     return axios.get(encodedURI)
       .then(function (response) {
-        return response.data.items;
+        console.log(response.data["Search"]);
+        return response.data["Search"];
       });
   }
 };

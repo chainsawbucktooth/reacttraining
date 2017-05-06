@@ -4,7 +4,7 @@ var api = require('../utils/api')
 var Loading = require('./Loading');
 
 function SelectLanguage (props) {
-  var languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
+  var languages = ['Star Wars', 'Fast and the Furious', 'Star Trek', 'Police Academy', 'Resident Evil', 'Madea'];
   return (
     <ul className='languages'>
       {languages.map(function (lang) {
@@ -31,19 +31,18 @@ function ReposGrid(props) {
     <ul className='popular-list'>
       {props.repos.map(function(repo, index) {
         return (
-          <li key={repo.name} className='popular-item'>
+          <li key={repo["imdbID"]} className='popular-item'>
              <div className='popular-rank'>#{index + 1}</div>
              <ul className='space-list-items'>
                <li>
                   <img
                     className='avatar'
-                    src={repo.owner.avatar_url}
-                    alt={'Avatar for ' + repo.owner.login}
+                    src={repo["Poster"]}
+                    alt={'Avatar for ' + repo["Title"]}
                   />
                </li>
-               <li><a href={repo.html_url}>{repo.name}</a></li>
-               <li>@{repo.owner.login}</li>
-               <li>{repo.stargazers_count} stars</li>
+               <li><a href={repo["Poster"]}>{repo["Title"]}</a></li>
+               <li>{repo["Year"]}</li>
              </ul>
           </li>
         )

@@ -22,9 +22,9 @@ var config = {
     plugins: [new HtmlWebpackPlugin({
        template: 'app/index.html'
     })]
-}
+};
 
-if ('build for production') === 'production' {
+if (process.env.NODE_ENV === 'production') {
   config.plugins.push(
     new webpack.DefinePlugin({
       'process.env': {
