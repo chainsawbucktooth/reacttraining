@@ -11,15 +11,6 @@ function getProfile (username) {
     });
 }
 
-function getMovie (searchterm) {
-  return axios.get('https://www.omdbapi.com/?s=' + searchterm + '&type=movie')
-    .then(function (movies) {
-      console.log(movies["Search"]);
-      return movies["Search"];
-    });
-}
-
-
 function getRepos (username) {
   return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100');
 }
@@ -69,12 +60,19 @@ module.exports = {
       .then(sortPlayers)
       .catch(handleError);
   },
+
+  getMoviePoster: function (searchterm) {
+    return axios.get('https://www.omdbapi.com/?t=' + searchterm + '&type=movie')
+      .then(function (movie) {
+        return movie.data["Poster"];
+      });
+  },
+
   fetchPopularRepos: function (language) {
     var encodedURI = window.encodeURI('https://www.omdbapi.com/?s=' + language + '&type=movie');
 
     return axios.get(encodedURI)
       .then(function (response) {
-        console.log(response.data["Search"]);
         return response.data["Search"];
       });
   }
