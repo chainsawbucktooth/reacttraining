@@ -75,6 +75,7 @@ class Battle extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(id, username) {
     this.setState(function () {
       var newState = {};
@@ -83,6 +84,7 @@ class Battle extends React.Component {
       return newState;
     });
   }
+
   handleReset(id) {
     this.setState(function () {
       var newState = {};

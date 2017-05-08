@@ -77,20 +77,30 @@ class Battle extends React.Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleSubmit(id, username) {
-    console.log("Someone mashed the button!")
-    this.setState(function () {
 
+  handleSubmit(id, username) {
+      var self = this;
+      console.log('some1 mashed a button!')
+      var newState = {};
       var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + username + '&type=movie');
       return axios.get(encodedURI)
         .then(function (response) {
-          var newState = {};
+            newState[id + 'Name'] = username;
+            newState[id + 'Image'] = response.data["Poster"];
+            self.setState(newState)
+        });
+  }
+
+  movieData(id, username) {
+    console.log("Someone mashed the button!")
+    var newState = {};
+    var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + username + '&type=movie');
+    return axios.get(encodedURI)
+      .then(function (response) {
           newState[id + 'Name'] = username;
           newState[id + 'Image'] = response.data["Poster"];
-          console.log(newState);
           return newState;
-        });
-    });
+      });
   }
 
   handleReset(id) {
