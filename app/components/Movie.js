@@ -91,18 +91,6 @@ class Battle extends React.Component {
         });
   }
 
-  movieData(id, username) {
-    console.log("Someone mashed the button!")
-    var newState = {};
-    var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + username + '&type=movie');
-    return axios.get(encodedURI)
-      .then(function (response) {
-          newState[id + 'Name'] = username;
-          newState[id + 'Image'] = response.data["Poster"];
-          return newState;
-      });
-  }
-
   handleReset(id) {
     this.setState(function () {
       var newState = {};
