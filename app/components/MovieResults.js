@@ -12,13 +12,13 @@ function Profile (props) {
   return (
     <PlayerPreview username={info.login} avatar={info.avatar_url}>
       <ul className='space-list-items'>
-        {info.name && <li>{info.name}</li>}
+        {info.title && <li>{info.title}</li>}
         {info.location && <li>{info.location}</li>}
         {info.company && <li>{info.company}</li>}
         <li>Followers: {info.followers}</li>
         <li>Following: {info.following}</li>
         <li>Public Repos: {info.public_repos}</li>
-        {info.blog && <li><a href={info.blog}>{info.blog}</a></li>}
+        {info.blog && <li><a href={info.imdbID}>{info.blog}</a></li>}
       </ul>
     </PlayerPreview>
   )
@@ -44,7 +44,7 @@ Player.propTypes = {
   profile: PropTypes.object.isRequired,
 }
 
-class Results extends React.Component {
+class MovieResults extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,15 +55,16 @@ class Results extends React.Component {
     }
   }
   componentDidMount() {
-    var players = queryString.parse(this.props.location.search);
-    api.battle([
-      players.playerOneName,
-      players.playerTwoName
-    ]).then(function(players) {
-      if (players === null) {
+    var movies = queryString.parse(this.props.location.search);
+     console.log(movies)
+    api.moviebattle([
+      movies.movieOneName,
+      movies.movieTwoName
+    ]).then(function(movies) {
+      if (movies === null) {
         return this.setState(function () {
           return {
-            error: 'Looks like there was an error. Check that both users exist on Github.',
+            error: 'Looks like there was an error. Check that both movies exist.',
             loading: false,
           }
         });
@@ -72,8 +73,8 @@ class Results extends React.Component {
       this.setState(function () {
         return {
           error: null,
-          winner: players[0],
-          loser: players[1],
+          winner: movies[0],
+          loser: movies[1],
           loading: false,
         }
       });
@@ -115,4 +116,4 @@ class Results extends React.Component {
   }
 }
 
-module.exports = Results;
+module.exports = MovieResults;

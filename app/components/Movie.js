@@ -3,89 +3,47 @@ var PropTypes = require('prop-types');
 var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
 var PlayerPreview = require('./PlayerPreview');
+var PlayerInput = require('./PlayerInput');
+var ReposGrid = require('./ReposGrid');
 var axios = require('axios');
 
-class PlayerInput extends React.Component {
+class Movie extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: ''
-    };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange(event) {
-    var value = event.target.value;
-
-    this.setState(function () {
-      return {
-        username: value
-      }
-    });
-  }
-  handleSubmit(event) {
-    event.preventDefault();
-
-    this.props.onSubmit(
-      this.props.id,
-      this.state.username
-    );
-  }
-  render() {
-    return (
-      <form className='column' onSubmit={this.handleSubmit}>
-        <label className='header' htmlFor='username'>{this.props.label}</label>
-        <input
-          id='username'
-          placeholder='title'
-          type='text'
-          value={this.state.username}
-          autoComplete='off'
-          onChange={this.handleChange}
-        />
-        <button
-          className='button'
-          type='submit'
-          disabled={!this.state.username}>
-            Submit
-        </button>
-      </form>
-    )
-  }
-}
-
-PlayerInput.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-}
-
-PlayerInput.defaultProps = {
-  label: 'Username',
-}
-
-class Battle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      playerOneName: '',
-      playerTwoName: '',
-      playerOneImage: null,
-      playerTwoImage: null,
+      movieOneName: '',
+      movieTwoName: '',
+      movieOneImage: null,
+      movieTwoImage: null,
+      movieArrayOne: null,
+      movieArrayTwo: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(id, username) {
+  handleSearch(id, title) {
+      var self = this;
+      console.log('some1 searched for movies!')
+      var newState = {};
+      var encodedURI = window.encodeURI('https://www.omdbapi.com/?s=' + title + '&type=movie');
+      return axios.get(encodedURI)
+        .then(function (response) {
+            newState[id + 'Name'] = title;
+            newState[id + 'Image'] = response.data["Poster"];
+            self.setState(newState)
+        });
+  }
+
+
+  handleSubmit(id, title) {
       var self = this;
       console.log('some1 mashed a button!')
       var newState = {};
-      var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + username + '&type=movie');
+      var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + title + '&type=movie');
       return axios.get(encodedURI)
         .then(function (response) {
-            newState[id + 'Name'] = username;
+            newState[id + 'Name'] = title;
             newState[id + 'Image'] = response.data["Poster"];
             self.setState(newState)
         });
@@ -102,57 +60,59 @@ class Battle extends React.Component {
 
   render() {
     var match = this.props.match;
-    var playerOneName = this.state.playerOneName;
-    var playerOneImage = this.state.playerOneImage;
-    var playerTwoName = this.state.playerTwoName;
-    var playerTwoImage = this.state.playerTwoImage;
+    var movieOneName = this.state.movieOneName;
+    var movieOneImage = this.state.movieOneImage;
+    var movieTwoName = this.state.movieTwoName;
+    var movieTwoImage = this.state.movieTwoImage;
+    var movieArrayOne = this.state.movieArrayOne;
+    var movieArrayTwo = this.state.movieArrayTwo;
 
     return (
       <div>
         <div className='row'>
-          {!playerOneName &&
+          {!movieOneName &&
             <PlayerInput
-              id='playerOne'
+              id='movieOne'
               label='Movie One'
               onSubmit={this.handleSubmit}
             />}
 
-          {playerOneImage !== null &&
+          {movieOneImage !== null &&
             <PlayerPreview
-              avatar={playerOneImage}
-              username={playerOneName}>
+              avatar={movieOneImage}
+              username={movieOneName}>
                 <button
                   className='reset'
-                  onClick={this.handleReset.bind(this, 'playerOne')}>
+                  onClick={this.handleReset.bind(this, 'movieOne')}>
                     Reset
                 </button>
             </PlayerPreview>}
 
-          {!playerTwoName &&
+          {!movieTwoName &&
             <PlayerInput
-              id='playerTwo'
+              id='movieTwo'
               label='Movie Two'
               onSubmit={this.handleSubmit}
             />}
 
-          {playerTwoImage !== null &&
+          {movieTwoImage !== null &&
             <PlayerPreview
-              avatar={playerTwoImage}
-              username={playerTwoName}>
+              avatar={movieTwoImage}
+              username={movieTwoName}>
                 <button
                   className='reset'
-                  onClick={this.handleReset.bind(this, 'playerTwo')}>
+                  onClick={this.handleReset.bind(this, 'movieTwo')}>
                     Reset
                 </button>
             </PlayerPreview>}
         </div>
 
-        {playerOneImage && playerTwoImage &&
+        {movieOneImage && movieTwoImage &&
           <Link
             className='button'
             to={{
-              pathname: match.url + '/results',
-              search: '?playerOneName=' + playerOneName + '&playerTwoName=' + playerTwoName
+              pathname: match.url + '/movieresults',
+              search: '?movieOneName=' + movieOneName + '&movieTwoName=' + movieTwoName
             }}>
               Battle
           </Link>}
@@ -161,4 +121,4 @@ class Battle extends React.Component {
   }
 }
 
-module.exports = Battle;
+module.exports = Movie;

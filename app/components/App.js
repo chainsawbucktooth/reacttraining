@@ -9,6 +9,7 @@ var Battle = require('./Battle');
 var Movie = require('./Movie');
 var Popular = require('./Popular');
 var Results = require('./Results');
+var MovieResults = require('./MovieResults');
 
 class App extends React.Component {
   render () {
@@ -20,7 +21,8 @@ class App extends React.Component {
               <Route exact path='/' component={Home}/>
               <Route exact path='/battle' component={Battle}/>
               <Route path='/battle/results'component={Results}/>
-              <Route path='/movie'component={Movie}/>
+              <Route exact path='/movie'component={Movie}/>
+              <Route path='/movie/movieresults'component={MovieResults}/>
               <Route path='/popular' component={Popular}/>
               <Route render={function() {
                 return <p>File Not Found :(</p>

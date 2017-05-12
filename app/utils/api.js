@@ -11,6 +11,13 @@ function getProfile (username) {
     });
 }
 
+function getIMDBProfile (title) {
+  return axios.get('https://www.omdbapi.com/?s=' + title + '&type=movie')
+    .then(function (movie) {
+      return movie.data;
+    });
+}
+
 function getRepos (username) {
   return axios.get('https://api.github.com/users/' + username + '/repos' + params + '&per_page=100');
 }
@@ -50,6 +57,12 @@ function getUserData (player) {
 
 function sortPlayers (players) {
   return players.sort(function (a,b) {
+    return b.imdbRating - a.imdbRating;
+  });
+}
+
+function sortMovies (movies) {
+  return movies.sort(function (a,b) {
     return b.score - a.score;
   });
 }
@@ -58,6 +71,12 @@ module.exports = {
   battle: function (players) {
     return axios.all(players.map(getUserData))
       .then(sortPlayers)
+      .catch(handleError);
+  },
+
+  moviebattle: function (movies) {
+    return axios.all(movies.map(getIMDBProfile))
+      .then(sortMovies)
       .catch(handleError);
   },
 
