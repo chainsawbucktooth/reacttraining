@@ -3,8 +3,6 @@ var PropTypes = require('prop-types');
 var api = require('../utils/api');
 
 function PlayerPreview(props) {
-    console.log("Avatar: " + props.avatar);
-      console.log("Username: "+ props.username);
   return (
     <div>
       <div className='column'>

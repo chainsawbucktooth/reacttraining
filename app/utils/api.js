@@ -12,7 +12,7 @@ function getProfile (username) {
 }
 
 function getIMDBProfile (title) {
-  return axios.get('https://www.omdbapi.com/?s=' + title + '&type=movie')
+  return axios.get('https://www.omdbapi.com/?t=' + title + '&type=movie')
     .then(function (movie) {
       return movie.data;
     });
@@ -57,13 +57,13 @@ function getUserData (player) {
 
 function sortPlayers (players) {
   return players.sort(function (a,b) {
-    return b.imdbRating - a.imdbRating;
+    return b.score - a.score;
   });
 }
 
 function sortMovies (movies) {
   return movies.sort(function (a,b) {
-    return b.score - a.score;
+    return b.imdbRating - a.imdbRating;
   });
 }
 

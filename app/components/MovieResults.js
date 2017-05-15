@@ -3,24 +3,21 @@ var PropTypes = require('prop-types');
 var queryString = require('query-string');
 var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
-var PlayerPreview = require('./PlayerPreview');
+var MoviePreview = require('./MoviePreview');
 var Loading = require('./Loading');
 
 function Profile (props) {
   var info = props.info;
-
+  console.log(props);
   return (
-    <PlayerPreview username={info.login} avatar={info.avatar_url}>
+    <MoviePreview props={info} >
       <ul className='space-list-items'>
-        {info.title && <li>{info.title}</li>}
-        {info.location && <li>{info.location}</li>}
-        {info.company && <li>{info.company}</li>}
-        <li>Followers: {info.followers}</li>
-        <li>Following: {info.following}</li>
-        <li>Public Repos: {info.public_repos}</li>
-        {info.blog && <li><a href={info.imdbID}>{info.blog}</a></li>}
+        {info["Year"] && <li><b>Year: </b>{info["Year"]}</li>}
+        {info["Actors"] && <li><b>Cast: </b>{info["Actors"]}</li>}
+        {info["Plot"] && <li><b>Synopsis: </b>{info["Plot"]}</li>}
+
       </ul>
-    </PlayerPreview>
+    </MoviePreview>
   )
 }
 
@@ -28,21 +25,21 @@ Profile.propTypes = {
   info: PropTypes.object.isRequired,
 }
 
-function Player (props) {
+function Movie (props) {
+  var link = 'https://www.imdb.com/title/' + props.profile['imdbID'];
   return (
     <div>
-      <h1 className='header'>{props.label}</h1>
-      <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
+      <h1 className='header'><a href={link} >{props.profile["Title"]}</a></h1>
+      <h3 style={{textAlign: 'center'}}>{props.rating}</h3>
       <Profile info={props.profile} />
     </div>
   )
 }
 
-Player.propTypes = {
-  label: PropTypes.string.isRequired,
-  score: PropTypes.number.isRequired,
+Movie.propTypes = {
   profile: PropTypes.object.isRequired,
 }
+
 
 class MovieResults extends React.Component {
   constructor(props) {
@@ -56,7 +53,6 @@ class MovieResults extends React.Component {
   }
   componentDidMount() {
     var movies = queryString.parse(this.props.location.search);
-     console.log(movies)
     api.moviebattle([
       movies.movieOneName,
       movies.movieTwoName
@@ -101,15 +97,15 @@ class MovieResults extends React.Component {
 
     return (
       <div className='row'>
-        <Player
+        <Movie
           label='Winner'
-          score={winner.score}
-          profile={winner.profile}
+          rating={winner["imdbRating"]}
+          profile={winner}
         />
-        <Player
+        <Movie
           label='Loser'
-          score={loser.score}
-          profile={loser.profile}
+          rating={loser["imdbRating"]}
+          profile={loser}
         />
       </div>
     )

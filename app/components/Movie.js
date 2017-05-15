@@ -24,7 +24,6 @@ class Movie extends React.Component {
 
   handleSearch(id, title) {
       var self = this;
-      console.log('some1 searched for movies!')
       var newState = {};
       var encodedURI = window.encodeURI('https://www.omdbapi.com/?s=' + title + '&type=movie');
       return axios.get(encodedURI)
@@ -35,10 +34,8 @@ class Movie extends React.Component {
         });
   }
 
-
   handleSubmit(id, title) {
       var self = this;
-      console.log('some1 mashed a button!')
       var newState = {};
       var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + title + '&type=movie');
       return axios.get(encodedURI)
