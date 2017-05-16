@@ -5,6 +5,7 @@ function ReposGrid(props) {
   return (
     <ul className='popular-list'>
       {props.repos.map(function(repo, index) {
+
         return (
           <li key={repo["imdbID"]} className='popular-item'>
              <div className='popular-rank'>#{index + 1}</div>
@@ -16,7 +17,7 @@ function ReposGrid(props) {
                     alt={'Avatar for ' + repo["Title"]}
                   />
                </li>
-               <li><a href={repo["Poster"]}>{repo["Title"]}</a></li>
+               <li><a href={'https://www.imdb.com/title/' + repo['imdbID']}>{repo["Title"]}</a></li>
                <li>{repo["Year"]}</li>
              </ul>
           </li>
