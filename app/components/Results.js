@@ -8,7 +8,6 @@ var Loading = require('./Loading');
 
 function Profile (props) {
   var info = props.info;
-  console.log(props);
   return (
     <MoviePreview props={info} >
       <ul className='space-list-items'>

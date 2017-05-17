@@ -2,37 +2,21 @@ var React = require('react');
 var PropTypes = require('prop-types');
 var api = require('../utils/api');
 var Link = require('react-router-dom').Link;
-var PlayerPreview = require('./PlayerPreview');
+var MoviePreview = require('./MoviePreview');
 var PlayerInput = require('./PlayerInput');
-var ReposGrid = require('./ReposGrid');
 var axios = require('axios');
 
 class Battle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      movieOneName: '',
-      movieTwoName: '',
-      movieOneImage: null,
-      movieTwoImage: null,
-      movieArrayOne: null,
-      movieArrayTwo: null,
+      movieOne: null,
+      movieTwo: null,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSearch(id, title) {
-      var self = this;
-      var newState = {};
-      var encodedURI = window.encodeURI('https://www.omdbapi.com/?s=' + title + '&type=movie');
-      return axios.get(encodedURI)
-        .then(function (response) {
-            newState[id + 'Name'] = title;
-            newState[id + 'Image'] = response.data["Poster"];
-            self.setState(newState)
-        });
-  }
 
   handleSubmit(id, title) {
       var self = this;
@@ -40,76 +24,68 @@ class Battle extends React.Component {
       var encodedURI = window.encodeURI('https://www.omdbapi.com/?t=' + title + '&type=movie');
       return axios.get(encodedURI)
         .then(function (response) {
-            newState[id + 'Name'] = title;
-            newState[id + 'Image'] = response.data["Poster"];
-            self.setState(newState)
+            newState[id] = response.data;
+            self.setState(newState);
         });
   }
 
   handleReset(id) {
     this.setState(function () {
       var newState = {};
-      newState[id + 'Name'] = '';
-      newState[id + 'Image'] = null;
+      newState[id] = null;
       return newState;
     })
   }
 
   render() {
     var match = this.props.match;
-    var movieOneName = this.state.movieOneName;
-    var movieOneImage = this.state.movieOneImage;
-    var movieTwoName = this.state.movieTwoName;
-    var movieTwoImage = this.state.movieTwoImage;
-    var movieArrayOne = this.state.movieArrayOne;
-    var movieArrayTwo = this.state.movieArrayTwo;
+    var movieOne = this.state.movieOne;
+    var movieTwo = this.state.movieTwo;
 
     return (
       <div>
         <div className='row'>
-          {!movieOneName &&
+          {!movieOne &&
             <PlayerInput
               id='movieOne'
               label='Movie One'
               onSubmit={this.handleSubmit}
             />}
 
-          {movieOneImage !== null &&
-            <PlayerPreview
-              avatar={movieOneImage}
-              username={movieOneName}>
+          {movieOne !== null &&
+            <MoviePreview
+              props={movieOne}>
                 <button
                   className='reset'
                   onClick={this.handleReset.bind(this, 'movieOne')}>
                     Reset
                 </button>
-            </PlayerPreview>}
+            </MoviePreview>}
 
-          {!movieTwoName &&
+          {!movieTwo &&
             <PlayerInput
               id='movieTwo'
               label='Movie Two'
               onSubmit={this.handleSubmit}
             />}
 
-          {movieTwoImage !== null &&
-            <PlayerPreview
-              avatar={movieTwoImage}
-              username={movieTwoName}>
+          {movieTwo !== null &&
+            <MoviePreview
+              props={movieTwo}>
                 <button
                   className='reset'
                   onClick={this.handleReset.bind(this, 'movieTwo')}>
                     Reset
                 </button>
-            </PlayerPreview>}
+            </MoviePreview>}
         </div>
 
-        {movieOneImage && movieTwoImage &&
+        {movieOne && movieTwo &&
           <Link
             className='button'
             to={{
               pathname: match.url + '/results',
-              search: '?movieOneName=' + movieOneName + '&movieTwoName=' + movieTwoName
+              search: '?movieOneName=' + movieOne["Title"] + '&movieTwoName=' + movieTwo["Title"]
             }}>
               Battle
           </Link>}
